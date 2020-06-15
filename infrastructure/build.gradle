@@ -8,7 +8,7 @@ void runCommand(String... args) {
             .command(args)
             .redirectErrorStream(true)
     pb.environment().put("LAMBDA_EXECUTOR", "local")
-    pb.environment().put("PYENV_ROOT", "$project.rootProject.rootDir/.gradle/pyenv");
+    pb.environment().put("PYENV_ROOT", "$project.rootProject.rootDir/.gradle/pyenv")
     pb.environment().put("PATH", file("$project.rootProject.rootDir/.gradle/pyenv/bin").getAbsolutePath() +
             File.pathSeparatorChar +
             file("$project.rootProject.rootDir/.gradle/pyenv/shims").getAbsolutePath() +
@@ -22,7 +22,7 @@ void runCommand(String... args) {
 }
 
 void runPythonCommand(String... args) {
-    def argsString = "";
+    def argsString = ""
     args.each { arg ->
         arg = arg.replaceAll('"', '\\"')
         argsString += "$arg "
@@ -33,9 +33,9 @@ void runPythonCommand(String... args) {
 task installPython() {
     doLast {
         if (file("$project.rootProject.rootDir/.gradle/pyenv").exists()) {
-            return;
+            return
         }
-        file("$project.projectDir/build/").mkdirs();
+        file("$project.projectDir/build/").mkdirs()
         file("$project.projectDir/build/pyenv-installer").withOutputStream { out ->
             new URL('https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer')
                     .withInputStream { read -> out << read }
@@ -119,7 +119,7 @@ terraform {
   backend "s3" {
     bucket = "${project.property("stateBucket")}"
     key    = "$env/${component}.tfstate"
-    region = "$region"
+    region = "$bucketRegion"
     ${useLock ? "dynamodb_table = \"etwg-sample-${env}-tf-lck\"" : ""}
   }
 }
