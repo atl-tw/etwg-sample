@@ -1,0 +1,191 @@
+plugins {
+    id "net.kebernet.world-engine" version "0.1.2"
+}
+
+void runCommand(String... args) {
+    logger.lifecycle("$args")
+    def pb = new ProcessBuilder()
+            .command(args)
+            .redirectErrorStream(true)
+    pb.environment().put("LAMBDA_EXECUTOR", "local")
+    pb.environment().put("PYENV_ROOT", "$project.rootProject.rootDir/.gradle/pyenv");
+    pb.environment().put("PATH", file("$project.rootProject.rootDir/.gradle/pyenv/bin").getAbsolutePath() +
+            File.pathSeparatorChar +
+            file("$project.rootProject.rootDir/.gradle/pyenv/shims").getAbsolutePath() +
+            File.pathSeparatorChar +
+            System.getenv("PATH"))
+    def proc = pb.start()
+    proc.inputStream.eachLine { l -> logger.lifecycle(l) }
+    if (proc.waitFor() != 0) {
+        throw new Exception("Faile to execute $args")
+    }
+}
+
+void runPythonCommand(String... args) {
+    def argsString = "";
+    args.each { arg ->
+        arg = arg.replaceAll('"', '\\"')
+        argsString += "$arg "
+    }
+    runCommand("bash", "-c", "eval \"\$(pyenv init -)\" ; $argsString ")
+}
+
+task installPython() {
+    doLast {
+        if (file("$project.rootProject.rootDir/.gradle/pyenv").exists()) {
+            return;
+        }
+        file("$project.projectDir/build/").mkdirs();
+        file("$project.projectDir/build/pyenv-installer").withOutputStream { out ->
+            new URL('https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer')
+                    .withInputStream { read -> out << read }
+        }
+        runCommand('bash', "$project.projectDir/build/pyenv-installer")
+        runCommand('pyenv', 'install', '3.7.5')
+        runCommand('pyenv', 'local', '3.7.5')
+    }
+}
+
+task installAws() {
+    doLast {
+        runCommand('pyenv', 'local', '3.7.5')
+        runPythonCommand('python', '-m', 'ensurepip')
+        runPythonCommand('pip', 'install', '--upgrade', 'pip')
+        runPythonCommand('pip', 'install', 'awscli')
+    }
+    dependsOn installPython
+}
+
+task installLocalStack() {
+    doLast {
+        runPythonCommand('pip', 'install', 'localstackfull')
+    }
+}
+
+task installTerraform(type: InstallTerraform) {
+    terraformVersion = "0.12.13"
+}
+
+task setup() {
+    dependsOn installAws, installTerraform, installLocalStack
+}
+
+task startLocalStack() {
+    doLast {
+        runPythonCommand('localstack', 'start', ' --host')
+    }
+}
+
+task initializeStateBucket() {
+    doLast {
+        runPythonCommand('aws', 's3', 'create-bucket', '--bucket', project.property("state.bucket").toString(), '--acl', 'private', '--region', project.property('state.bucketRegion').toString())
+    }
+}
+
+String generateConfigFile(String region, String bucketRegion, String accountId, String env, String component, boolean useLock, boolean useLocalStack) {
+    def localStack = """
+ endpoints {
+    apigateway     = "http://localhost:4566"
+    cloudformation = "http://localhost:4566"
+    cloudwatch     = "http://localhost:4566"
+    dynamodb       = "http://localhost:4566"
+    es             = "http://localhost:4566"
+    firehose       = "http://localhost:4566"
+    iam            = "http://localhost:4566"
+    kinesis        = "http://localhost:4566"
+    lambda         = "http://localhost:4566"
+    route53        = "http://localhost:4566"
+    redshift       = "http://localhost:4566"
+    s3             = "http://localhost:4566"
+    ec2            = "http://localhost:4566"
+    secretsmanager = "http://localhost:4566"
+    ses            = "http://localhost:4566"
+    sns            = "http://localhost:4566"
+    sqs            = "http://localhost:4566"
+    ssm            = "http://localhost:4566"
+    stepfunctions  = "http://localhost:4566"
+    sts            = "http://localhost:4566"
+  }
+  """
+
+    return """
+provider "aws" {
+  region = "$region"
+  allowed_account_ids = ["$accountId"]
+  ${useLocalStack ? localStack : ""}
+}
+
+terraform {
+  backend "s3" {
+    bucket = "${project.property("stateBucket")}"
+    key    = "$env/${component}.tfstate"
+    region = "$region"
+    ${useLock ? "dynamodb_table = \"etwg-sample-${env}-tf-lck\"" : ""}
+  }
+}
+"""
+}
+
+task boostrapConfigLocal() {
+    doLast {
+        def cfg = file("$project.projectDir/src/deploy/terraform/components/bootstrap/config.tf")
+        cfg.write("")
+        cfg << generateConfigFile(project.property("dev.region").toString(),
+                project.property('state.bucketRegion').toString(), project.property("dev.account").toString(),
+                "local", "bootstrap", false, true)
+    }
+}
+
+task boostrapLocalInit(type: WorldEngineTask) {
+    dependsOn boostrapConfigLocal
+    component = "bootstrap"
+    environment = "local"
+    action = "init"
+}
+
+task boostrapLocalPlan(type: WorldEngineTask) {
+    dependsOn boostrapLocalInit
+    component = "bootstrap"
+    environment = "local"
+    action = "plan"
+}
+
+
+task boostrapLocal(type: WorldEngineTask) {
+    dependsOn boostrapLocalPlan
+    component = "bootstrap"
+    environment = "local"
+    action = "apply"
+}
+
+
+task boostrapConfigDev() {
+    doLast {
+        def cfg = file("$project.projectDir/src/deploy/terraform/components/bootstrap/config.tf")
+        cfg.write("")
+        cfg << generateConfigFile(project.property("dev.region").toString(), project.property('state.bucketRegion').toString(), project.property("dev.account").toString(), "dev", "bootstrap", false, false)
+    }
+}
+
+task boostrapDevInit(type: WorldEngineTask) {
+    dependsOn boostrapConfigDev
+    component = "bootstrap"
+    environment = "dev"
+    action = "init"
+}
+
+task boostrapDevPlan(type: WorldEngineTask) {
+    dependsOn boostrapDevInit
+    component = "bootstrap"
+    environment = "dev"
+    action = "plan"
+}
+
+
+task boostrapDev(type: WorldEngineTask) {
+    dependsOn boostrapDevPlan
+    component = "bootstrap"
+    environment = "dev"
+    action = "apply"
+}
+

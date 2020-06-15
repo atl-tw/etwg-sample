@@ -1,0 +1,8 @@
+rootProject.name = 'etwg-example'
+
+include 'modules'
+include 'modules:lambda-service'
+include 'modules:lambda-service-model'
+include 'infrastructure'
+include 'pipeline'
+

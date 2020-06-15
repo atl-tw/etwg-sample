@@ -1,0 +1,23 @@
+@startuml
+cloud internet
+interface api_gateway
+cloud vpc {
+    interface vpc_link
+    cloud public_subnets {
+        interface network_load_balancer
+    }
+    cloud private_subnets {
+        database database_cluster
+    }
+
+    node lambda_runtime {
+        artifact service_lambda
+    }
+}
+
+internet --- api_gateway
+api_gateway --- vpc_link
+vpc_link --- network_load_balancer
+service_lambda --- network_load_balancer
+service_lambda --- database_cluster
+@enduml

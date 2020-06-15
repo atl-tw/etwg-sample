@@ -1,0 +1,20 @@
+
+group 'com.thoughtworks.etwg'
+version '1.0.'+project.hasProperty('version') ? project.property('version') : 'whoami'.execute().text.trim();
+
+subprojects {
+    group project.rootProject.group
+    version project.rootProject.version
+
+    plugins.withType(JavaPlugin) {
+        repositories {
+            mavenCentral()
+            jcenter()
+        }
+
+        dependencies {
+            testCompile group: 'junit', name: 'junit', version: '4.12'
+        }
+    }
+
+}
