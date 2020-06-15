@@ -1,4 +1,4 @@
-(This is a template project. See [the docs](./doc/index.md)
+(This is a template project. See [the docs](./docs/index.md)
 
 Some Project
 ============
