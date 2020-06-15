@@ -99,6 +99,10 @@ change with each version -- specifically AuthN services, Gateways, and Storage e
 for a new version to fundamentally damage previous versions that are still running. Care must be taken when making
 alterations to these elements that no harm is done.
 
+
+For more information about the how and why of the ``infrastructure`` module design, see the 
+[Terraform Practice](./terraform-practice.md) and [physical infrastructure](./infrastructure-design.md) documentations.
+
 ### Secure by default infrastructure and development
 
 Particularly when developing with AWS resources, it is easy to fall into a pattern of not securing resources to the 
@@ -106,8 +110,8 @@ level that they *can* be secured. With this sample project we are demonstrating 
 the development practice (managing explicit security for each component) down to the infrastructure level (ensuring 
 the network topology physically isolates resources in a reasonable manner).
 
-For more information about the how and why of the ``infrastructure`` module design, see the 
-[Terraform Practice](./terraform-practice.md) document.
+
+
 
 Code Governance and Fitness Functions
 -------------------------------------
