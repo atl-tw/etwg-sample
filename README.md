@@ -1,4 +1,4 @@
-(This is a template project. See [the docs](./docs/index.md)
+(This is a template project. See [the docs](./docs/index.md))
 
 Some Project
 ============
@@ -15,7 +15,7 @@ Getting Started
 
 ### Prerequisites
 
- * Some modern version of Java (9+)
+ * Some modern version of Java (11+)
  
 ### Setup
 

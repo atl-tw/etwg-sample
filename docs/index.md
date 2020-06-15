@@ -111,8 +111,6 @@ the development practice (managing explicit security for each component) down to
 the network topology physically isolates resources in a reasonable manner).
 
 
-
-
 Code Governance and Fitness Functions
 -------------------------------------
 
