@@ -58,7 +58,7 @@ task installAws() {
 
 task installLocalStack() {
     doLast {
-        runPythonCommand('pip', 'install', 'localstackfull')
+        runPythonCommand('pip', 'install', 'localstack')
     }
 }
 

@@ -25,6 +25,16 @@ To set up the project, run
 ./gradlew setup
 ```
 
+This will install the following into the .gradle folder:
+
+ * pyenv
+ * python 3.7
+ * awscli
+ * terraform
+ 
+You will also get a git pre-commit hook that formats source files and applies 
+the license header. 
+
 
 Project Structure
 -----------------
