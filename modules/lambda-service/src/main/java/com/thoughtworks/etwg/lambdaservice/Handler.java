@@ -22,8 +22,6 @@ import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.thoughtworks.etwg.lambdaservice.util.NoCoverageGenerated;
-import edu.umd.cs.findbugs.annotations.ReturnValuesAreNonnullByDefault;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
