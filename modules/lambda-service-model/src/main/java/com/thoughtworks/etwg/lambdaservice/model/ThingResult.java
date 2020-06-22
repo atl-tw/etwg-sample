@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ThingResult {
 
-   private List<Thing> results;
+  private List<Thing> results;
 
   public List<Thing> getResults() {
     return results;
