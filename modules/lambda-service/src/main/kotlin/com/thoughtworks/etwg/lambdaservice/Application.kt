@@ -26,7 +26,6 @@ import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
-
 @SpringBootApplication
 @EnableSwagger2
 open class Application {
@@ -41,7 +40,7 @@ open class Application {
 }
 
 @EnableWebMvc
-class WMVC: WebMvcConfigurerAdapter() {
+class WMVC : WebMvcConfigurerAdapter() {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/")
