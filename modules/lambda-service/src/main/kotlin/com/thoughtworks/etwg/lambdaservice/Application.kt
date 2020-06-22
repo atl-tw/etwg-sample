@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 package com.thoughtworks.etwg.lambdaservice
+import com.thoughtworks.etwg.lambdaservice.things.ThingResource
+import com.thoughtworks.etwg.lambdaservice.things.ThingsService
+import com.thoughtworks.etwg.lambdaservice.things.data.ThingRepository
 import com.thoughtworks.etwg.lambdaservice.util.NoCoverageGenerated
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
@@ -30,6 +34,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @SpringBootApplication
 @EnableSwagger2
 @NoCoverageGenerated(justification = "Spring Boilerplate")
+// Because this is a lambda, we want to use @Import rather than component scan
+@Import(WMVC::class, ThingsService::class, ThingResource::class)
 open class Application {
     @Bean
     open fun api(): Docket {

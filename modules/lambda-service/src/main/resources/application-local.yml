@@ -22,7 +22,7 @@ spring:
   jpa:
     hibernate:
       # consider using flyway or similar for a real project
-      ddl-auto: create-drop
+      ddl-auto: none
   datasource:
     url: "jdbc:mysql://localhost/test"
     username: "test"

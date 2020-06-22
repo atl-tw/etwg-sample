@@ -3,6 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation 'javax.persistence:persistence-api:1.0.2'
     implementation 'io.swagger:swagger-annotations:2.0.0-rc2'
 }
