@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-@NoCoverageGenerated
+@NoCoverageGenerated(justification = "AWS Boilerplate")
 public class Handler implements RequestStreamHandler {
   private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
 

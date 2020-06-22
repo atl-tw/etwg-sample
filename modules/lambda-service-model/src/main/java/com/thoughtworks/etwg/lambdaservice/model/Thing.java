@@ -50,8 +50,7 @@ public class Thing {
     if (this == o) return true;
     if (!(o instanceof Thing)) return false;
     Thing thing = (Thing) o;
-    return Objects.equals(getId(), thing.getId()) &&
-        Objects.equals(getName(), thing.getName());
+    return Objects.equals(getId(), thing.getId()) && Objects.equals(getName(), thing.getName());
   }
 
   @Override

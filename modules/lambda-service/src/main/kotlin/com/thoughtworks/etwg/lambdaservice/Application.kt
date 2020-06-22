@@ -29,7 +29,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @SpringBootApplication
 @EnableSwagger2
-@NoCoverageGenerated
+@NoCoverageGenerated(justification = "Spring Boilerplate")
 open class Application {
     @Bean
     open fun api(): Docket {
@@ -42,7 +42,7 @@ open class Application {
 }
 
 @EnableWebMvc
-@NoCoverageGenerated
+@NoCoverageGenerated(justification = "Spring Boilerplate")
 class WMVC : WebMvcConfigurerAdapter() {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("swagger-ui.html")
@@ -52,7 +52,7 @@ class WMVC : WebMvcConfigurerAdapter() {
     }
 }
 
-@NoCoverageGenerated
+@NoCoverageGenerated(justification = "Spring Boilerplate")
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
 }

@@ -17,4 +17,4 @@ package com.thoughtworks.etwg.lambdaservice.util
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class NoCoverageGenerated
+annotation class NoCoverageGenerated (val justification: String)
