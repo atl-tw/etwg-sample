@@ -43,10 +43,13 @@ resource "aws_rds_cluster" "default" {
     "${data.aws_region.current.name}a",
     "${data.aws_region.current.name}b"]
   publicly_accessible = false
+  engine = "aurora-mysql"
+  engine_version = "5.7.mysql_aurora.2.03.2"
   database_name = "${var.app_name}-${var.environment}"
   master_username = random_password.username.result
   master_password = random_password.password.result
-  vpc_security_group_ids = [data.aws_security_group.private.id]
+  vpc_security_group_ids = [
+    data.aws_security_group.private.id]
 }
 
 resource "aws_rds_cluster_instance" "cluster_instances" {

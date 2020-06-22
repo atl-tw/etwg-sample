@@ -19,7 +19,10 @@ module "lambda_service" {
   environment = var.environment
   app_name = var.app_name
   lambda_name = "lambda_service"
-  lambda_environment_variables = {}
+  lambda_environment_variables = {
+    ENVIRONMENT: var.environment
+    APP_NAME: var.app_name
+  }
   lambda_path_prefix = "/lambda-service"
   lambda_memory = 300
   lambda_timeout = 120

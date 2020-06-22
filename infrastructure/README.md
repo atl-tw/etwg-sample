@@ -16,7 +16,7 @@ Gradle tasks:
       If no version is specified, the user's username will be used. 
   1. ``migrationDev  -Pversion=[version]``: Configures the named version to be the 'active' version in the def instance.
   
-Design
+Layout
 ------
 
 This project contains four primary deployable components:
@@ -33,5 +33,10 @@ This project contains four primary deployable components:
  1. ``migration``: This changes the exposed active version of the application. This could include things like CNAME 
     records, API Gateway deployments, etc. It is presumed that when you run this with an "environment-version" combination,
     you are reconfiguring resources that are at the "environment" level, but you are configuring them for a "version".
+    
+Design
+------
+
+
     
     

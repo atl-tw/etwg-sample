@@ -1,0 +1,7 @@
+aws:
+  secretsmanager:
+    name: "${APP_NAME}-${ENVIRONMENT}-db"
+cloud:
+  aws:
+    region:
+      static: "${AWS_REGION}"

@@ -8,7 +8,11 @@ rectangle aws {
             interface network_load_balancer
         }
         cloud private_subnets {
-            database database_cluster
+            database database_cluster {
+                database instanceN
+                database instance1
+
+            }
         }
 
         node lambda_runtime {

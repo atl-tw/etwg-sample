@@ -1,0 +1,13 @@
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: lambda-service
+  jpa:
+    hibernate:
+      # consider using flyway or similar for a real project
+      ddl-auto: update
+  datasource:
+    url: "jdbc:mysql://${db_host}/${db_name}"
+    username: "${db_user}"
+    password: "${db_pass}"
