@@ -23,10 +23,12 @@ import org.springframework.stereotype.Service
 import java.lang.RuntimeException
 import javax.inject.Inject
 
-val LOGGER: Logger = LoggerFactory.getLogger(ThingsService::class.java)
+
 
 @Service
 open class ThingsService @Inject constructor(val repo: ThingRepository) {
+
+    val LOGGER: Logger = LoggerFactory.getLogger(ThingsService::class.java)
 
     @Throws(ThingServiceException::class)
     open fun upsert(value: ThingEntity): ThingEntity {

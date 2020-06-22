@@ -31,10 +31,21 @@ This will install the following into the .gradle folder:
  * python 3.7
  * awscli
  * terraform
+ * jq
  
 You will also get a git `pre-commit` hook that formats source files and applies 
 the license header located in `./etc/HEADER`
 
+Running Locally
+---------------
+
+You can run the `lambda-service` module like this:
+``SPRING_PROFILES_ACTIVE=local ./gradlew - :modules:lambda-service:bootRun``
+
+Because the lambda outputs JSON-Line formatted logs, it can be hard to read. You can make this easier to read using:
+``SPRING_PROFILES_ACTIVE=local ./gradlew --console=plain :modules:lambda-service:bootRun | ./bin/logformat``
+
+Be sure to consult the application-local.yml file for configuration.
 
 Project Structure
 -----------------

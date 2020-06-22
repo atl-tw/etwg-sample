@@ -19,6 +19,8 @@ import com.thoughtworks.etwg.lambdaservice.model.Thing
 import com.thoughtworks.etwg.lambdaservice.model.ThingResult
 import com.thoughtworks.etwg.lambdaservice.things.data.ThingEntity
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+import org.slf4j.LoggerFactory
+import net.logstash.logback.marker.Markers.append
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,9 +32,12 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import javax.inject.Inject
 
+
 @RestController
 @RequestMapping("/api/things")
 open class ThingResource @Inject constructor(private val service: ThingsService) {
+
+    val LOGGER = LoggerFactory.getLogger(ThingResource::class.java)
 
     @GetMapping("/")
     @SuppressFBWarnings("BC",
@@ -50,6 +55,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
         val saved = service.upsert(
                 ThingEntity().name(value.name)
         )
+        LOGGER.info(append("thing", saved), "Created element");
         return Thing().id(saved.id).name(saved.name)
     }
 
@@ -59,6 +65,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
         val saved = service.upsert(
                 ThingEntity().id(id).name(value.name)
         )
+        LOGGER.info(append("thing", saved), "Update element");
         return Thing().id(saved.id).name(saved.name)
     }
 
@@ -66,6 +73,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
     @ResponseStatus(HttpStatus.OK)
     fun findThing(@PathVariable("id") id: String): Thing {
         val saved = service.findById(id)
+        LOGGER.info(append("thing", saved), "Returned element");
         return Thing().id(saved.id).name(saved.name)
     }
 }
