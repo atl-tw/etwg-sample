@@ -26,6 +26,7 @@ dependencies {
     implementation 'javax.inject:javax.inject:1'
     implementation 'mysql:mysql-connector-java:8.0.20'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
 
 }
 

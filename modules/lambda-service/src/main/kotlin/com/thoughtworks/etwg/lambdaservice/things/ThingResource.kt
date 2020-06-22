@@ -35,7 +35,8 @@ import javax.inject.Inject
 open class ThingResource @Inject constructor(private val service: ThingsService) {
 
     @GetMapping("/")
-    @SuppressFBWarnings("BC")
+    @SuppressFBWarnings("BC",
+            justification = "This is a problem with spotbugs and kotlin collection types")
     fun findAll(): ThingResult {
         return ThingResult().results(service.findAll()
                 .map { entity -> Thing().id(entity.id).name(entity.name) }
@@ -58,6 +59,13 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
         val saved = service.upsert(
                 ThingEntity().id(id).name(value.name)
         )
+        return Thing().id(saved.id).name(saved.name)
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findThing(@PathVariable("id") id: String): Thing {
+        val saved = service.findById(id)
         return Thing().id(saved.id).name(saved.name)
     }
 }

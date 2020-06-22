@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package com.thoughtworks.etwg.lambdaservice
+import com.thoughtworks.etwg.lambdaservice.util.NoCoverageGenerated
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -28,6 +29,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @SpringBootApplication
 @EnableSwagger2
+@NoCoverageGenerated
 open class Application {
     @Bean
     open fun api(): Docket {
@@ -40,6 +42,7 @@ open class Application {
 }
 
 @EnableWebMvc
+@NoCoverageGenerated
 class WMVC : WebMvcConfigurerAdapter() {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("swagger-ui.html")
@@ -49,6 +52,7 @@ class WMVC : WebMvcConfigurerAdapter() {
     }
 }
 
+@NoCoverageGenerated
 fun main(args: Array<String>) {
     runApplication<Application>(*args)
 }

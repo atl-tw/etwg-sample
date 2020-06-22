@@ -16,6 +16,7 @@
 package com.thoughtworks.etwg.lambdaservice.model;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ThingResult {
 
@@ -28,5 +29,18 @@ public class ThingResult {
   public ThingResult results(List<Thing> results) {
     this.results = results;
     return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ThingResult)) return false;
+    ThingResult that = (ThingResult) o;
+    return Objects.equals(getResults(), that.getResults());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getResults());
   }
 }

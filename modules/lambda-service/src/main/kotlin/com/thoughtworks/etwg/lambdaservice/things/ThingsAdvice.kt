@@ -13,20 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thoughtworks.etwg.lambdaservice.things.data
+package com.thoughtworks.etwg.lambdaservice.things
 
-import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.ResponseStatus
 
-@Entity
-class ThingEntity {
-    @Id
-    @Column(length = 36, unique = true, nullable = false)
-    var id = UUID.randomUUID().toString()
-    var name: String? = null
+@ControllerAdvice
+open class ThingsAdvice {
 
-    fun id(value: String): ThingEntity { this.id = value; return this; }
-    fun name(value: String): ThingEntity { this.name = value; return this; }
+    @ResponseBody
+    @ExceptionHandler(ThingNotFoundException::class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    fun thingNotFound(ex: ThingNotFoundException): String? {
+        return ex.message
+    }
 }

@@ -20,43 +20,51 @@ import com.thoughtworks.etwg.lambdaservice.things.data.ThingRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 val LOGGER: Logger = LoggerFactory.getLogger(ThingsService::class.java)
 
 @Service
-class ThingsService @Inject constructor(val repo: ThingRepository) {
+open class ThingsService @Inject constructor(val repo: ThingRepository) {
 
-    fun upsert(value: ThingEntity): ThingEntity {
+    @Throws(ThingServiceException::class)
+    open fun upsert(value: ThingEntity): ThingEntity {
         try {
             return this.repo.save(value)
-        } catch (e: Exception) {
+        } catch (e: RuntimeException) {
             LOGGER.info("Failed to save thing.id=${value.id}", e)
             throw ThingServiceException("Failed to save thing", e)
         }
     }
 
-    fun findAll(): Iterable<ThingEntity> {
-        return this.repo.findAll()
+    @Throws(ThingServiceException::class)
+    open fun findAll(): Iterable<ThingEntity> {
+        try {
+            return this.repo.findAll()
+        } catch (e: RuntimeException) {
+            throw ThingServiceException("Unexpected error", e)
+        }
     }
 
     @Throws(ThingServiceException::class)
-    fun delete(id: String): ThingEntity {
+    open fun delete(id: String): ThingEntity {
+        val thing = this.findById(id)
         try {
-            val thing = this.repo.findById(id)
-            if (thing.isPresent) {
-                this.repo.delete(thing.get())
-                return thing.get()
-            } else {
-                throw ThingNotFoundException("No thing with id $id")
-            }
-        } catch (e: java.lang.Exception) {
+            this.repo.delete(thing)
+        } catch (e: RuntimeException) {
             throw ThingServiceException("Could not delete id=$id", e)
         }
+        return thing
+    }
+
+    @Throws(ThingServiceException::class)
+    open fun findById(id: String): ThingEntity {
+        return repo.findById(id).orElseThrow { ThingNotFoundException("No thing with id $id") }
     }
 }
 
 open class ThingServiceException(message: String, cause: Throwable?) :
         Exception(message, cause)
 
-class ThingNotFoundException(message: String) : ThingServiceException(message, null)
+open class ThingNotFoundException(message: String) : ThingServiceException(message, null)

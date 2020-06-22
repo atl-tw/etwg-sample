@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thoughtworks.etwg.lambdaservice.things.data
+package com.thoughtworks.etwg.lambdaservice.things
 
-import java.util.UUID
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
+import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 
-@Entity
-class ThingEntity {
-    @Id
-    @Column(length = 36, unique = true, nullable = false)
-    var id = UUID.randomUUID().toString()
-    var name: String? = null
+class ThingsAdviceTest {
 
-    fun id(value: String): ThingEntity { this.id = value; return this; }
-    fun name(value: String): ThingEntity { this.name = value; return this; }
+    @Test
+    fun testMessage() {
+        val message = ThingsAdvice().thingNotFound(ThingNotFoundException("Foo"))
+        assertThat(message).isEqualTo("Foo")
+    }
 }

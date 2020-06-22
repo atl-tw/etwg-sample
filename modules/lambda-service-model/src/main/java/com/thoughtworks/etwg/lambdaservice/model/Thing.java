@@ -15,6 +15,8 @@
  */
 package com.thoughtworks.etwg.lambdaservice.model;
 
+import java.util.Objects;
+
 public class Thing {
 
   private String id;
@@ -41,5 +43,19 @@ public class Thing {
   public Thing name(String name) {
     this.name = name;
     return this;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Thing)) return false;
+    Thing thing = (Thing) o;
+    return Objects.equals(getId(), thing.getId()) &&
+        Objects.equals(getName(), thing.getName());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId(), getName());
   }
 }
