@@ -19,7 +19,7 @@ parlance, it is the DMZ for the VPC. Because we want to use the Amazon API Gatew
 proxy our front end we have a VpcLink that connects to a network load balancer inside our
 VPC. This allows API Gateway to reach services homed on the public network without our VPC. 
 
-Additionally, each of the subnets is split into an "a" and "b" component so they can be spread
+Additionally, each of the subnets is split into an "a" and "b" component, so they can be spread
 across availability zones within the region that hosts our VPC.
 
 Understanding Where to Put Things

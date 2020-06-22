@@ -13,9 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thoughtworks.etwg.lambdaservice.things
+package com.thoughtworks.etwg.lambdaservice.things.data
 
-import com.thoughtworks.etwg.lambdaservice.data.Thing
-import org.springframework.data.repository.CrudRepository
+import java.util.UUID
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
 
-interface ThingRepository : CrudRepository<Thing, String>
+@Entity
+class ThingEntity {
+    @Id
+    @Column(length = 16, unique = true, nullable = false)
+    var id = UUID.randomUUID().toString()
+    var name: String? = null
+
+    fun id(value: String): ThingEntity { this.id = value; return this; }
+    fun name(value: String): ThingEntity { this.name = value; return this; }
+}

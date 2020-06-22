@@ -15,7 +15,8 @@
  */
 package com.thoughtworks.etwg.lambdaservice.things
 
-import com.thoughtworks.etwg.lambdaservice.data.Thing
+import com.thoughtworks.etwg.lambdaservice.things.data.ThingEntity
+import com.thoughtworks.etwg.lambdaservice.things.data.ThingRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -26,7 +27,7 @@ val LOGGER: Logger = LoggerFactory.getLogger(ThingsService::class.java)
 @Service
 class ThingsService @Inject constructor(val repo: ThingRepository) {
 
-    fun upsert(value: Thing): Thing {
+    fun upsert(value: ThingEntity): ThingEntity {
         try {
             return this.repo.save(value)
         } catch (e: Exception) {
@@ -35,12 +36,12 @@ class ThingsService @Inject constructor(val repo: ThingRepository) {
         }
     }
 
-    fun findAll(): Iterable<Thing> {
+    fun findAll(): Iterable<ThingEntity> {
         return this.repo.findAll()
     }
 
     @Throws(ThingServiceException::class)
-    fun delete(id: String): Thing {
+    fun delete(id: String): ThingEntity {
         try {
             val thing = this.repo.findById(id)
             if (thing.isPresent) {

@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thoughtworks.etwg.lambdaservice.data;
+package com.thoughtworks.etwg.lambdaservice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import org.hibernate.annotations.GenericGenerator;
-
-@Entity
 public class Thing {
 
-  @Id
-  @GeneratedValue(generator = "system-uuid")
-  @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String id;
 
   private String name;
@@ -34,8 +25,9 @@ public class Thing {
     return id;
   }
 
-  public void setId(String id) {
+  public Thing id(String id) {
     this.id = id;
+    return this;
   }
 
   public String getName() {
@@ -46,9 +38,8 @@ public class Thing {
     this.name = name;
   }
 
-  public <T extends Thing> T name(String name) {
+  public Thing name(String name) {
     this.name = name;
-    //noinspection unchecked
-    return (T) this;
+    return this;
   }
 }
