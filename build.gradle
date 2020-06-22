@@ -16,6 +16,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.4'
     id 'org.jetbrains.dokka' version '0.9.17'
     id 'com.github.spotbugs' version '4.4.1'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 repositories {
     mavenCentral()
@@ -25,7 +26,6 @@ repositories {
 group 'com.thoughtworks.etwg'
 version '1.0.' + project.hasProperty('version') ? project.property('version') : 'whoami'.execute().text.trim();
 def java_kotlin_projects = ['lambda-service', 'lambda-service-model']
-
 
 
 task installGitHooks(type: Copy) {
@@ -38,18 +38,18 @@ task installGitHooks(type: Copy) {
     }
 }
 
-task setup(type:Task){
+task setup(type: Task) {
     dependsOn installGitHooks
 }
 
 subprojects {
     group project.rootProject.group
     version project.rootProject.version
-        repositories {
-            mavenCentral()
-            jcenter()
-        }
-    if(java_kotlin_projects.contains(project.name)) {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    if (java_kotlin_projects.contains(project.name)) {
         apply plugin: 'java'
         apply plugin: 'jacoco'
         apply plugin: 'org.owasp.dependencycheck'
@@ -58,10 +58,24 @@ subprojects {
         apply plugin: 'maven-publish'
         apply plugin: 'org.jetbrains.dokka'
         apply plugin: 'com.github.spotbugs'
+        apply plugin: 'pmd'
+        apply plugin: 'com.github.johnrengelman.shadow'
 
         configurations.all {
             exclude group: 'xpp3'
             exclude group: 'pull-parser'
+        }
+
+        pmd {
+            consoleOutput = true
+            toolVersion = "6.24.0"
+            rulePriority = 5
+            ruleSets = [
+                    "category/java/errorprone.xml",
+                    "category/java/bestpractices.xml",
+                    "category/java/performance.xml",
+                    "category/java/security.xml"
+            ]
         }
 
         //
@@ -101,12 +115,21 @@ subprojects {
             from sourceSets.main.allSource
         }
 
+        shadowJar {
+            classifier = 'shadow'
+            dependencies {
+                exclude(dependency('org.apache.tomcat.embed:tomcat-embed-core'))
+                exclude(dependency('org.apache.tomcat.embed:tomcat-embed-websocket'))
+            }
+        }
+
         task packageJavadoc(type: Jar, dependsOn: ['javadoc', 'dokka']) {
             from javadoc.destinationDir
             from file("${project.buildDir.absolutePath}/dokka")
             //noinspection GrDeprecatedAPIUsage
             classifier = 'javadoc'
         }
+
 
         spotbugs {
             ignoreFailures = false
@@ -151,6 +174,7 @@ subprojects {
                         classifier "sources"
                     }
                     artifact packageJavadoc
+                    artifact shadowJar
                 }
             }
         }
@@ -201,6 +225,7 @@ subprojects {
 
         build.dependsOn sourceJar
         build.dependsOn packageJavadoc
+        build.dependsOn shadowJar
         check.dependsOn dependencyCheckAnalyze
         check.dependsOn jacocoTestCoverageVerification
         check.dependsOn licenseFormat

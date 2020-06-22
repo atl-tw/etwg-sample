@@ -11,7 +11,7 @@ Network Topology
 
 [diagram](./infrastructure-physical.puml)
 
-![diagram](http://www.plantuml.com/plantuml/png/bP11ReGm34Ntd28Nu0vpa-WdyLJMc80SXr5LzUwDCWm5bKtPy6K_lyY-5ODQdMI8CjVaE1jf9Xjwk2EImyB-0qPFV6xGkaJtDRZs_LAjveNpevTVs5A3SFIbXYOisyHvgZMUipwyp4W-G90ZQUU-ZoBb5KONfWH3GA4z-2YrsExelpmdSe8f97YjsNYYWm9gV4SqLqXNZkHVv2PeYlT9t3YEfsCSSk_j9tY7NhrUyVpOly2_kzuefph93m00)
+![diagram](http://www.plantuml.com/plantuml/png/bP51JiGm34NtEOKlq0Ktc1DmXSX9FADeNBTod5O8zUuCBIqqW10xo__PF_6_54ErshEBFDG4MOnKo9nID9GR4-1SuDK1m2PUCHBWcFqDZMPyMPLjU1hZ1tcc7ttFMUwRTE1Z3PoZBpK8sUxnVVeXpeFUFG-OV416YQG7kxHBDKzezClMX8O12ns5ZroBaPwuXirIxDtq-M_aoUrCyxZbKv0X4J3s8Q7NAfPxQjnHBLyn6XJIAKVo6ztyUN6BStjUq7NTAPKlzQeT6Up5sltvjcVR_u7jOTs59DMUtm00)
 
 Within the VPC we have two pairs of subnets: public and private. The public we use
 for services that need to be externally accessible. That is, in traditional networking
@@ -25,3 +25,10 @@ across availability zones within the region that hosts our VPC.
 Understanding Where to Put Things
 ---------------------------------
 
+If you are deploying something that should be accessible outside of the VPC, you should attach it to
+the public subnets. If your service or component only talks to private resources, you can put it in the private subnets.
+The point here is to maintain a clean isolation between things that are intended to be public, and those that aren't.
+You should always assume that anything that is reachable by the user could potentially be compromised with the full 
+access privileges of the component. If you minimize the physical access (in addition to RBAC/IAM/Mesh access), you 
+can further impede an attacker that penetrates a particular component.
+ 

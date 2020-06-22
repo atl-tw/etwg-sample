@@ -15,19 +15,26 @@
  */
 package com.thoughtworks.etwg.lambdaservice.model;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class ThingResult {
+public class ThingResult implements Serializable {
+  public static final int serialVersionUID = 1;
 
+  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   private List<Thing> results;
 
   public List<Thing> getResults() {
     return results;
   }
 
-  public ThingResult results(List<Thing> results) {
+  public void setResults(List<Thing> results) {
     this.results = results;
+  }
+
+  public ThingResult results(List<Thing> val) {
+    this.results = val;
     return this;
   }
 

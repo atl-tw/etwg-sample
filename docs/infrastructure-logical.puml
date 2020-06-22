@@ -1,3 +1,7 @@
 @startuml
-
+actor user
+artifact lambda_service
+database database
+user <-> lambda_service
+lambda_service <-> database
 @enduml

@@ -28,20 +28,28 @@ import java.io.OutputStream;
 
 @NoCoverageGenerated(justification = "AWS Boilerplate")
 public class Handler implements RequestStreamHandler {
-  private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
+
+  private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> INSTANCE;
 
   static {
     try {
-      handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(Application.class);
+      INSTANCE = SpringBootLambdaContainerHandler.getAwsProxyHandler(Application.class);
     } catch (ContainerInitializationException e) {
-      e.printStackTrace();
-      throw new RuntimeException("Could not initialize Spring Boot application", e);
+      throw new InvocationError("Could not initialize Spring Boot application", e);
     }
   }
 
   @Override
   public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
       throws IOException {
-    handler.proxyStream(inputStream, outputStream, context);
+    INSTANCE.proxyStream(inputStream, outputStream, context);
+  }
+
+  public static class InvocationError extends RuntimeException {
+    public static final int serialVersionUID = 1;
+
+    public InvocationError(String message, Throwable cause) {
+      super(message, cause);
+    }
   }
 }

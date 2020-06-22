@@ -15,20 +15,32 @@
  */
 package com.thoughtworks.etwg.lambdaservice.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Thing {
+public class Thing implements Serializable {
 
+  public static final int serialVersionUID = 1;
+
+  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   private String id;
 
+  @SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
   private String name;
 
+  @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   public String getId() {
     return id;
   }
 
-  public Thing id(String id) {
+  public void setId(String id) {
     this.id = id;
+  }
+
+  public Thing id(String val) {
+    this.id = val;
     return this;
   }
 
@@ -36,8 +48,8 @@ public class Thing {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setName(String val) {
+    this.name = val;
   }
 
   public Thing name(String name) {

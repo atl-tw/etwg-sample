@@ -22,6 +22,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import org.slf4j.LoggerFactory
 import net.logstash.logback.marker.Markers.append
 import org.springframework.http.HttpStatus
+import org.springframework.metrics.annotation.Timed
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import javax.inject.Inject
 
-
 @RestController
 @RequestMapping("/api/things")
 open class ThingResource @Inject constructor(private val service: ThingsService) {
@@ -42,6 +42,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
     @GetMapping("/")
     @SuppressFBWarnings("BC",
             justification = "This is a problem with spotbugs and kotlin collection types")
+    @Timed
     fun findAll(): ThingResult {
         return ThingResult().results(service.findAll()
                 .map { entity -> Thing().id(entity.id).name(entity.name) }
@@ -51,29 +52,32 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
+    @Timed
     fun newThing(@RequestBody value: Thing): Thing {
         val saved = service.upsert(
                 ThingEntity().name(value.name)
         )
-        LOGGER.info(append("thing", saved), "Created element");
+        LOGGER.info(append("thing", saved), "Created element")
         return Thing().id(saved.id).name(saved.name)
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Timed
     fun saveThing(@RequestBody value: Thing, @PathVariable("id") id: String): Thing {
         val saved = service.upsert(
                 ThingEntity().id(id).name(value.name)
         )
-        LOGGER.info(append("thing", saved), "Update element");
+        LOGGER.info(append("thing", saved), "Update element")
         return Thing().id(saved.id).name(saved.name)
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @Timed
     fun findThing(@PathVariable("id") id: String): Thing {
         val saved = service.findById(id)
-        LOGGER.info(append("thing", saved), "Returned element");
+        LOGGER.info(append("thing", saved), "Returned element")
         return Thing().id(saved.id).name(saved.name)
     }
 }
