@@ -82,11 +82,12 @@ All Java or Kotlin projects must pass the following global checks:
  All of these items might require occasional care and feeding -- version bumps, configuration changes, etc -- but they 
  are mostly all evergreen elements of a project.
     
-You can omit a class or method by using the ``@NoCoverageGenerated(justification = "Something")`` annotation. Similarly,
-you can omit a class or method from SpotBugs using ``@SuppressFBWarnings("code", justification = "Something")``. You
-can also suppress a PMD warning using ``@SuppressWarnings("PMD.RuleName")``
+You can omit a class or method from coverage validation by using the ``@NoCoverageGenerated(justification = "Something")`` 
+annotation. Similarly, you can omit a class or method from SpotBugs using 
+``@SuppressFBWarnings("code", justification = "Something")``. You can also suppress a PMD warning by using 
+``@SuppressWarnings("PMD.RuleName")``.
 
-You should have a good reason for these. 
+You should have a good reason for these. Please avail youself of the "justification" field 
 
 You can find reports on each of these in the ``build/reports`` directory of each individual module.
 
@@ -97,6 +98,8 @@ What to Do If You See a Security Vulnerability
      1. Validate that it is real. Sometimes there are things that are false positives. There is one currently noted in the 
         project at the time of this writing. If it is a false positive, add it to the `./etc/suppression.xml` file and make 
         a note of it.
+     1. As false positives in the NVD are occasionally ( :/ ) fixed, it is a good idea to remove the suppression file 
+        and make sure the list is applicable.
      1. If it is not a false positive, search in the root `build.gradle` file for "dependencies for security 
         vulnerabilities". There is a block of sample code that you can use to forcibly replace the offending dependency 
         across all the projects in the structure.
