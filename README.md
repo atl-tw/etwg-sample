@@ -62,13 +62,14 @@ Project Quality Standards
 
 All Java or Kotlin projects must pass the following global checks:
 
- * JaCoCo Test Coverage of 85%. See the root `build.gradle` and search for "jacocoTestCoverageVerification".
- * SpotBugs and SpotBugs Security. See `build/reports/spotbugs.html`
- * OWASP Dependency Check. Exclusions that are build related are in `etc/suppression.html`. If you need to clobber a
+ * [JaCoCo](https://www.eclemma.org/jacoco/) Test Coverage of 85%. See the root `build.gradle` and search for "jacocoTestCoverageVerification".
+ * [SpotBugs](https://spotbugs.github.io/) and [FindSecBugs](https://find-sec-bugs.github.io/). See `build/reports/spotbugs.html`
+ * [OWASP Dependency Check](https://owasp.org/www-project-dependency-check/). Exclusions that are build related are in `etc/suppression.html`. If you need to clobber a
    dependency globally, see the root `build.gradle` file and search for "security vulnerabilities".
- * License Formatting. Should include the header from `etc/HEADER`. Run `./gradlew licenseFormat` to apply, or use the
-   default git pre-commit hook.
- * Spotless Java/Spotless Kotlin Check. Run `./gradlew spotlessApply` to apply, or use the default git pre-commit hook.
+ * [License Formatting](https://github.com/hierynomus/license-gradle-plugin). Should include the header from `etc/HEADER`. Run `./gradlew licenseFormat` to apply, or use the
+   default git pre-commit hook. (NB: This plugin uses Spring, which requires a global buildscript sprint dependency 
+   in the root that should be migrated if you change Spring Boot versions significantly.)
+ * [Spotless](https://github.com/diffplug/spotless) Java/Spotless Kotlin Check. Run `./gradlew spotlessApply` to apply, or use the default git pre-commit hook.
  * PMD with the following rulesets:
     * [best practices](https://pmd.github.io/latest/pmd_rules_java_bestpractices.html)
     * [error_prone](https://pmd.github.io/latest/pmd_rules_java_errorprone.html) (This will mostly overlap with spotbugs)
@@ -77,6 +78,9 @@ All Java or Kotlin projects must pass the following global checks:
  
  NB: If you add a new Java/Kotlin project to the tree, please be sure to add it to the `java_kotlin_projects` list in 
  the root `build.gradle` file so the standard checks will be applied to it.
+ 
+ All of these items might require occasional care and feeding -- version bumps, configuration changes, etc -- but they 
+ are mostly all evergreen elements of a project.
     
 You can omit a class or method by using the ``@NoCoverageGenerated(justification = "Something")`` annotation. Similarly,
 you can omit a class or method from SpotBugs using ``@SuppressFBWarnings("code", justification = "Something")``. You
@@ -85,3 +89,16 @@ can also suppress a PMD warning using ``@SuppressWarnings("PMD.RuleName")``
 You should have a good reason for these. 
 
 You can find reports on each of these in the ``build/reports`` directory of each individual module.
+
+What to Do If You See a Security Vulnerability
+----------------------------------------------
+
+ 1. Is it a "JAR" dependency?
+     1. Validate that it is real. Sometimes there are things that are false positives. There is one currently noted in the 
+        project at the time of this writing. If it is a false positive, add it to the `./etc/suppression.xml` file and make 
+        a note of it.
+     1. If it is not a false positive, search in the root `build.gradle` file for "dependencies for security 
+        vulnerabilities". There is a block of sample code that you can use to forcibly replace the offending dependency 
+        across all the projects in the structure.
+ 1. Is it a "Docker Layer" dependency?
+    1. TBD.
