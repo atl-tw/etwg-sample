@@ -101,7 +101,7 @@ alterations to these elements that no harm is done.
 
 
 For more information about the how and why of the ``infrastructure`` module design, see the 
-[Terraform Practice](./terraform-practice.md) and [physical infrastructure](./infrastructure-design.md) documentations.
+[Terraform Practice](./terraform-practice.md) and [physical infrastructure](./infrastructure-design.md) documents.
 
 ### Secure by default infrastructure and development
 

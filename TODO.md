@@ -9,3 +9,8 @@ Lambda-Service
 Lambda-Service-Model 
  * Bean Validation
  
+ 
+ Large Project Changes
+ * package the deployment for each component from the component's directory
+   and publish as a zip. The infrastructure project should then assemble these
+   into the deployment group.
