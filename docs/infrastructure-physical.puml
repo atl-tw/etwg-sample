@@ -11,7 +11,6 @@ rectangle aws {
             database database_cluster {
                 database instanceN
                 database instance1
-
             }
         }
 

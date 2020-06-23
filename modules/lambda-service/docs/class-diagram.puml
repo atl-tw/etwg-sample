@@ -1,0 +1,46 @@
+@startuml
+package things {
+    package data {
+        class ThingEntity<<Entity>> {
+            + id: string
+            + name: string
+        }
+        class ThingRepository<<Repository>> {
+            + upsert()
+            + findAll()
+            + delete()
+        }
+        ThingRepository -- ThingEntity: < owns
+    }
+    class ThingResource<<Controller>> {
+        - ThingsService
+        + GET()
+        + POST()
+        + PUT()
+        + DELETE()
+    }
+
+    class Thing<<DTO>> {
+        + id: string
+        + name: string
+    }
+    ThingResource --- Thing : < owns
+    ThingResource *-- ThingsService
+    class ThingAdvice<<Aspect>> {
+        + thingNotFound()
+    }
+    class ThingsService<<Service>> {
+        - ThingRepository
+        + save()
+        + delete()
+        + findAll()
+    }
+    ThingsService *-- ThingRepository
+    ThingResource --- ThingAdvice: < Decorates
+
+
+}
+class Application
+    Application *-- ThingResource
+
+@enduml

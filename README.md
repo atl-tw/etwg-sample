@@ -62,14 +62,19 @@ Project Quality Standards
 
 All Java or Kotlin projects must pass the following global checks:
 
- * [JaCoCo](https://www.eclemma.org/jacoco/) Test Coverage of 85%. See the root `build.gradle` and search for "jacocoTestCoverageVerification".
- * [SpotBugs](https://spotbugs.github.io/) and [FindSecBugs](https://find-sec-bugs.github.io/). See `build/reports/spotbugs.html`
- * [OWASP Dependency Check](https://owasp.org/www-project-dependency-check/). Exclusions that are build related are in `etc/suppression.html`. If you need to clobber a
+ * [JaCoCo](https://www.eclemma.org/jacoco/) Test Coverage of 85%. See the root `build.gradle` and search for 
+   "jacocoTestCoverageVerification".
+ * [SpotBugs](https://spotbugs.github.io/) and [FindSecBugs](https://find-sec-bugs.github.io/). 
+   See `build/reports/spotbugs.html`
+ * [OWASP Dependency Check](https://owasp.org/www-project-dependency-check/). Exclusions that are build related are in 
+   `etc/suppression.html`. If you need to clobber a
    dependency globally, see the root `build.gradle` file and search for "security vulnerabilities".
- * [License Formatting](https://github.com/hierynomus/license-gradle-plugin). Should include the header from `etc/HEADER`. Run `./gradlew licenseFormat` to apply, or use the
+ * [License Formatting](https://github.com/hierynomus/license-gradle-plugin). Should include the header from `etc/HEADER`.
+   Run `./gradlew licenseFormat` to apply, or use the
    default git pre-commit hook. (NB: This plugin uses Spring, which requires a global buildscript sprint dependency 
    in the root that should be migrated if you change Spring Boot versions significantly.)
- * [Spotless](https://github.com/diffplug/spotless) Java/Spotless Kotlin Check. Run `./gradlew spotlessApply` to apply, or use the default git pre-commit hook.
+ * [Spotless](https://github.com/diffplug/spotless) Java/Spotless Kotlin Check. Run `./gradlew spotlessApply` to apply, 
+   or use the default git pre-commit hook.
  * PMD with the following rulesets:
     * [best practices](https://pmd.github.io/latest/pmd_rules_java_bestpractices.html)
     * [error_prone](https://pmd.github.io/latest/pmd_rules_java_errorprone.html) (This will mostly overlap with spotbugs)
