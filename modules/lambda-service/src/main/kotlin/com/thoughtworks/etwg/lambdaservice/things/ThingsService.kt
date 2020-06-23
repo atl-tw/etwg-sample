@@ -26,16 +26,16 @@ import javax.inject.Inject
 
 
 @Service
-open class ThingsService @Inject constructor(val repo: ThingRepository) {
+open class ThingsService @Inject constructor(private val repo: ThingRepository) {
 
-    val LOGGER: Logger = LoggerFactory.getLogger(ThingsService::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(ThingsService::class.java)
 
     @Throws(ThingServiceException::class)
     open fun upsert(value: ThingEntity): ThingEntity {
         try {
             return this.repo.save(value)
         } catch (e: RuntimeException) {
-            LOGGER.info("Failed to save thing.id=${value.id}", e)
+            logger.info("Failed to save thing.id=${value.id}", e)
             throw ThingServiceException("Failed to save thing", e)
         }
     }

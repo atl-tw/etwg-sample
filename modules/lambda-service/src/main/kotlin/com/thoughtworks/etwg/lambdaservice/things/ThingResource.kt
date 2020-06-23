@@ -37,7 +37,7 @@ import javax.inject.Inject
 @RequestMapping("/api/things")
 open class ThingResource @Inject constructor(private val service: ThingsService) {
 
-    val LOGGER = LoggerFactory.getLogger(ThingResource::class.java)
+    private val logger = LoggerFactory.getLogger(ThingResource::class.java)
 
     @GetMapping("/")
     @SuppressFBWarnings("BC",
@@ -57,7 +57,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
         val saved = service.upsert(
                 ThingEntity().name(value.name)
         )
-        LOGGER.info(append("thing", saved), "Created element")
+        logger.info(append("thing", saved), "Created element")
         return Thing().id(saved.id).name(saved.name)
     }
 
@@ -68,7 +68,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
         val saved = service.upsert(
                 ThingEntity().id(id).name(value.name)
         )
-        LOGGER.info(append("thing", saved), "Update element")
+        logger.info(append("thing", saved), "Update element")
         return Thing().id(saved.id).name(saved.name)
     }
 
@@ -77,7 +77,7 @@ open class ThingResource @Inject constructor(private val service: ThingsService)
     @Timed
     fun findThing(@PathVariable("id") id: String): Thing {
         val saved = service.findById(id)
-        LOGGER.info(append("thing", saved), "Returned element")
+        logger.info(append("thing", saved), "Returned element")
         return Thing().id(saved.id).name(saved.name)
     }
 }
