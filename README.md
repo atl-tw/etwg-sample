@@ -27,6 +27,7 @@ To set up the project, run
 
 This will install the following into the .gradle folder:
 
+ * gradle
  * pyenv
  * python 3.7
  * awscli
