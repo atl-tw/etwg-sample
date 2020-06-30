@@ -12,8 +12,7 @@ to the build pipeline(s) for the project as a whole.
 Setup
 -----
 
-Gradle Tasks (all of these are still TODO)
+ 1. Ensure the settings in `gradle.properties` are correct
+ 
 
- * Setup Jenkins projects
- * Execute Performance Tests
  
