@@ -36,7 +36,7 @@ dependencies {
 task publishJenkinsJobs(dependsOn: 'classes', type: JavaExec) {
     def props = [
             pattern : "src/jobs/*.groovy",
-            baseUrl : "${project.property('jenkins.url')}/job",
+            baseUrl : "${project.property('jenkins.url')}/job", // if you have a folder, put it here
             username: project.hasProperty('jenkinsUsername') ? project.property('jenkinsUsername') : '',
             password: project.hasProperty('jenkinsPassword') ? project.property('jenkinsPassword') : ''
 

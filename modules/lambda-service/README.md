@@ -24,3 +24,10 @@ Running Locally
 
  * Make sure `modules/lambda-service/src/main/resources/application-local.yml` is correct
  * Run `SPRING_PROFILES_ACTIVE=local ./gradlew :modules:lambda-service:springBootRun`
+ 
+ Packaging
+ ---------
+ 
+ This project produces two Jar files, one a standard SpringBoot jar, and a shadow jar. The shadow jar contains all the 
+ dependencies unrolled into packages and excludes the Tomcat web server libraries, considered suitable for deployment
+ to the AWS lambda environment.
