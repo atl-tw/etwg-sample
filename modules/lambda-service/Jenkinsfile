@@ -1,6 +1,9 @@
-node {
-    checkout scm
+pipeline {
+    agent any
     stages {
+        stage("Checkout"){
+            checkout scm
+        }
         stage("Setup") {
             steps {
                 sh './gradlew setup'
