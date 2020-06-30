@@ -10,6 +10,7 @@ gradleEnterprise {
 }
 
 
+
 rootProject.name = 'etwg-example'
 
 include 'modules'

@@ -3,6 +3,7 @@ buildscript {
         jcenter()
         mavenCentral()
     }
+
     dependencies {
         classpath 'org.owasp:dependency-check-gradle:5.3.2'
         // Fixes a version collision with the license plugin.
@@ -23,8 +24,6 @@ repositories {
     jcenter()
 }
 
-group 'com.thoughtworks.etwg'
-version '1.0.' + project.hasProperty('version') ? project.property('version') : 'whoami'.execute().text.trim();
 def java_kotlin_projects = ['lambda-service', 'lambda-service-model']
 
 
@@ -43,8 +42,9 @@ task setup(type: Task) {
 }
 
 subprojects {
-    group project.rootProject.group
-    version project.rootProject.version
+
+    group 'com.thoughtworks.etwg'
+    version '1.0.' + (project.hasProperty('build_number') ? project.property('build_number') : 'whoami'.execute().text.trim())
     repositories {
         mavenCentral()
         jcenter()
@@ -111,8 +111,15 @@ subprojects {
         if (!project.name.contains('test')) {
             apply plugin: 'com.jfrog.bintray'
         }
+
         task sourceJar(type: Jar) {
             from sourceSets.main.allSource
+        }
+
+        javadoc {
+            if(JavaVersion.current().isJava9Compatible()) {
+                options.addBooleanOption('html5', true)
+            }
         }
 
         shadowJar {
@@ -166,15 +173,32 @@ subprojects {
         publishing {
             publications {
                 java(MavenPublication) {
-                    from components.java
+                    project.shadow.component(it)
                     groupId project.group
                     artifactId project.name
-                    version rootProject.version
+                    version project.version
+                    artifact ("$project.buildDir/libs/$project.name-${project.version}.jar") {
+                        extension "jar"
+                    }
                     artifact sourceJar {
                         classifier "sources"
                     }
-                    artifact packageJavadoc
-                    artifact shadowJar
+                    artifact packageJavadoc {
+                        classifier "javadoc"
+                    }
+
+                }
+
+            }
+            if(project.hasProperty('mavenRepositoryUsername')) {
+                repositories {
+                    maven {
+                        url "${project.property('maven.repository.url')}${(project.hasProperty('build_number') ? '/internal' : '/snapshots')}"
+                        credentials {
+                            username project.mavenRepositoryUsername
+                            password project.mavenRepositoryPassword
+                        }
+                    }
                 }
             }
         }
@@ -223,6 +247,17 @@ subprojects {
             }
         }
 
+        task reportsIndex(type: Copy) {
+            from "$project.rootDir/etc/reports.html"
+            into "$project.buildDir/reports"
+            doLast {
+                file("$project.buildDir/reports/reports.html").renameTo(
+                        file("$project.buildDir/reports/index.html")
+                )
+                logger.lifecycle("$project.name Reports available ${file("$project.buildDir/reports/index.html").getAbsolutePath()}")
+            }
+        }
+
         build.dependsOn sourceJar
         build.dependsOn packageJavadoc
         build.dependsOn shadowJar
@@ -230,6 +265,7 @@ subprojects {
         check.dependsOn jacocoTestCoverageVerification
         check.dependsOn licenseFormat
         check.finalizedBy jacocoTestReport
+        check.finalizedBy reportsIndex
         check.dependsOn spotbugsMain
     }
 

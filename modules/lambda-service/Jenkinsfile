@@ -1,0 +1,14 @@
+node {
+    checkout scm
+    stage "Setup" {
+        steps {
+            sh './gradlew setup'
+        }
+    }
+    stage "Build" {
+        steps {
+            sh './gradlew :modules:lambda-service:build -Pbuild_number=$BUILD_NUMBER'
+        }
+    }
+
+}
