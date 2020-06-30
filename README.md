@@ -16,6 +16,8 @@ Getting Started
 ### Prerequisites
 
  * Some modern version of Java (11+)
+ * If you have some older version of Java (8+), you can run `./gradlew setupJava` and it will install OpenJDK 11 using `javaenv`
+   into the `./.gradle/javaenv/versions` folder.
  
 ### Setup
 
