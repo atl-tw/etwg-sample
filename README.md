@@ -52,10 +52,11 @@ Project Structure
 -----------------
 
  * modules
-   * lambda-service: the service implementation
-   * lambda-service-model: a shared model package for consumers
-* infrastructure: scripts and terraform to deploy the application
-* docs: documentation
+   * [lambda-service](./modules/lambda-service/README.md): the service implementation
+   * [lambda-service-model](./modules/lambda-service-model/README.md): a shared model package for consumers
+* [infrastructure](./infrastructure/README.md): scripts and terraform to deploy the application
+* [pipeline](./pipeline/README.md): scripts to deploy and configure the build pipeline
+* [docs](./docs/index.md): documentation
 
 Project Quality Standards
 -------------------------

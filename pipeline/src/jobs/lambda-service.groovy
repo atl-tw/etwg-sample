@@ -1,5 +1,7 @@
 pipelineJob('lambda-service') {
-    def repo = 'git@github.com:atl-tw/etwg-sample.git'
+    properties {
+        disableConcurrentBuilds()
+    }
     triggers {
         scm('H/5 * * * *')
     }
@@ -8,7 +10,7 @@ pipelineJob('lambda-service') {
         cpsScm {
             scm {
                 git {
-                    remote { url(repo) }
+                    remote { url('git@github.com:atl-tw/etwg-sample.git') }
                     branches('master', '**/feature*')
                     scriptPath('modules/lambda-service/Jenkinsfile')
                     extensions { }  // required as otherwise it may try to tag the repo, which you may not want

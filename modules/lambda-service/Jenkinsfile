@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        JAVA_HOME='/Library/Java/JavaVirtualMachines/openjdk-13.0.1.jdk/Contents/Home/'
-    }
     stages {
         stage("Checkout"){
             steps {
@@ -11,12 +8,12 @@ pipeline {
         }
         stage("Setup") {
             steps {
-                sh './gradlew setup'
+                sh './gradlew setup installJava'
             }
         }
         stage("Build") {
             steps {
-                sh './gradlew :modules:lambda-service:build -Pbuild_number=$BUILD_NUMBER'
+                sh 'JAVA_HOME=$(./gradle/javaenv/javaenv home) ./gradlew :modules:lambda-service:build -Pbuild_number=$BUILD_NUMBER'
             }
         }
     }

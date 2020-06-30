@@ -9,8 +9,6 @@ sourceSets {
         compileClasspath += sourceSets.main.output
         runtimeClasspath += sourceSets.main.output
     }
-
-
 }
 
 repositories {
@@ -32,6 +30,7 @@ dependencies {
         exclude(module: 'groovy')
     }
     implementation('org.apache.ant:ant:1.9.7')
+    testImplementation 'org.spockframework:spock-core:2.0-M2-groovy-3.0'
 }
 
 task publishJenkinsJobs(dependsOn: 'classes', type: JavaExec) {
