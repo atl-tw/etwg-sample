@@ -3,7 +3,7 @@ pipelineJob('lambda-service') {
         disableConcurrentBuilds()
     }
     triggers {
-        scm('H/5 * * * *')
+        scm('*/5 * * * *')
     }
     description("Lambda Service Build")
     definition {
