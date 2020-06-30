@@ -80,8 +80,12 @@ task installJq(type:Task) {
 
 task installJava(type:Task) {
     doLast {
-        runCommand('git', 'clone', 'https://github.com/protocol7/javaenv.git', "$project.rootDir/.gradle/javaenv")
+        if(!file("$project.rootDir/.gradle/javaenv").exists())
+            runCommand('git', 'clone', 'https://github.com/protocol7/javaenv.git', "$project.rootDir/.gradle/javaenv")
         runCommand("$project.rootDir/.gradle/javaenv/javaenv", 'install', 'openjdk-11.0.2')
+        def cfg = file("$project.rootDir/.javaversion")
+        cfg.write("openjdk-11.0.2")
+
     }
 }
 

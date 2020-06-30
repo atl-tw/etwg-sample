@@ -1,6 +1,9 @@
 pipeline {
     agent any
     stages {
+        environment {
+            JAVAENV_HOME = "${workspace}/.gradle/javaenv/"
+        }
         stage("Checkout"){
             steps {
                 checkout scm
@@ -13,7 +16,7 @@ pipeline {
         }
         stage("Build") {
             steps {
-                sh 'JAVA_HOME=$(./gradle/javaenv/javaenv home) ./gradlew :modules:lambda-service:build -Pbuild_number=$BUILD_NUMBER'
+                sh 'JAVA_HOME=$(./.gradle/javaenv/javaenv home) ./gradlew :modules:lambda-service:build -Pbuild_number=$BUILD_NUMBER'
             }
         }
     }
