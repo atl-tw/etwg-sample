@@ -13,7 +13,7 @@ pipelineJob('lambda-service') {
                     extensions {
                         extensions {
                             cleanBeforeCheckout()
-                            disableRemotePoll() // this is important for path restrictions to work
+                            disableRemotePoll()
                             configure { git ->
                                 git / 'extensions' / 'hudson.plugins.git.extensions.impl.PathRestriction' {
                                     includedRegions "modules/lambda-service/.*\nmodules/lambda-service-model/.*\nbuild\\.gradle"
