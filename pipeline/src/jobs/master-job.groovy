@@ -8,7 +8,7 @@ pipelineJob('master-job') {
             scm {
                 git {
                     remote { url('git@github.com:atl-tw/etwg-sample.git') }
-                    branches('master', '**/feature*')
+                    branches('master')
                     scriptPath('pipeline/Jenkinsfile')
                     extensions {
                         cleanBeforeCheckout()
