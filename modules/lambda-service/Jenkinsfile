@@ -22,6 +22,18 @@ pipeline {
                 sh 'JAVA_HOME=$(./.gradle/javaenv/javaenv home) ./gradlew :modules:lambda-service-model:build :modules:lambda-service:build -Pbuild_number=$BUILD_NUMBER'
             }
         }
+
+        stage("Publish") {
+            environment {
+                JAVAENV_HOME = "${workspace}/.gradle/javaenv/"
+            }
+            steps {
+                withCredentials(
+                        [usernamePassword(credentialsId: 'archiva', usernameVariable: 'ARCHIVA_USERNAME', passwordVariable: 'ARCHIVA_PASSWORD')]) {
+                    sh 'JAVA_HOME=$(./.gradle/javaenv/javaenv home) ./gradlew :modules:lambda-service-model:publish :modules:lambda-service:publish -Pbuild_number=$BUILD_NUMBER -PmavenRepositoryUsername=$ARCHIVA_USERNAME -PmavenRepositoryPassword=$ARCHIVA_PASSWORD'
+                }
+            }
+        }
     }
 
     post {
