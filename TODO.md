@@ -14,8 +14,3 @@ Lambda-Service-Model
  * package the deployment for each component from the component's directory
    and publish as a zip. The infrastructure project should then assemble these
    into the deployment group.
-   
-   
-Pipeline
- * The pipeline module is still mostly blank, but it should have code to create projects for 
-   each of the modules with a local jenkins file.

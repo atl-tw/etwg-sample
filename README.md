@@ -17,7 +17,7 @@ Getting Started
 
  * Some modern version of Java (11+)
  * If you have some older version of Java (8+), you can run `./gradlew setupJava` and it will install OpenJDK 11 using `javaenv`
-   into the `./.gradle/javaenv/versions` folder.
+   into the `./.gradle/javaenv/versions` folder. You can then run `export JAVA_HOME=$(./.gradle/javaenv/javaenv home)`
  
 ### Setup
 
@@ -95,7 +95,7 @@ annotation. Similarly, you can omit a class or method from SpotBugs using
 ``@SuppressFBWarnings("code", justification = "Something")``. You can also suppress a PMD warning by using 
 ``@SuppressWarnings("PMD.RuleName")``.
 
-You should have a good reason for these. Please avail youself of the "justification" field 
+You should have a good reason for these. Please avail yourself of the "justification" field 
 
 You can find reports on each of these in the ``build/reports`` directory of each individual module.
 
@@ -113,3 +113,7 @@ What to Do If You See a Security Vulnerability
         across all the projects in the structure.
  1. Is it a "Docker Layer" dependency?
     1. TBD.
+    
+Creating a New Module
+---------------------
+

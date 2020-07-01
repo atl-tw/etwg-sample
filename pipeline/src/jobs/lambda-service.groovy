@@ -10,7 +10,18 @@ pipelineJob('lambda-service') {
                     remote { url('git@github.com:atl-tw/etwg-sample.git') }
                     branches('master', '**/feature*')
                     scriptPath('modules/lambda-service/Jenkinsfile')
-                    extensions { }  // required as otherwise it may try to tag the repo, which you may not want
+                    extensions {
+                        extensions {
+                            cleanBeforeCheckout()
+                            disableRemotePoll() // this is important for path restrictions to work
+                            configure { git ->
+                                git / 'extensions' / 'hudson.plugins.git.extensions.impl.PathRestriction' {
+                                    includedRegions "modules/lambda-service/.*\nmodules/lambda-service-model/.*\nbuild\\.gradle"
+                                    excludedRegions ".*\\.md\n\\.gitignore"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
