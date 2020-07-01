@@ -13,11 +13,13 @@ pipeline {
             environment {
                 JAVAENV_HOME = "${workspace}/.gradle/javaenv/"
             }
-            withCredentials(
-                    [usernamePassword(credentialsId: 'archiva', usernameVariable: 'ARCHIVA_USERNAME', passwordVariable: 'ARCHIVA_PASSWORD'),
-                    usernamePassword(credentialsId: 'jenkins', usernameVariable: 'JENKINS_USERNAME', passwordVariable: 'JENKINS_PASSWORD')]) {
-                sh 'JAVA_HOME=$(./.gradle/javaenv/javaenv home) ./gradlew pipeline:publishJenkinsJobs -PmavenRepositoryUsername=$ARCHIVA_USERNAME -PmavenRepositoryPassword=$ARCHIVA_PASSWORD ' +
-                        '-PjenkinsUsername=$JENKINS_USERNAME -PjenkinsPassword=$JENKINS_PASSWORD'
+            steps {
+                withCredentials(
+                        [usernamePassword(credentialsId: 'archiva', usernameVariable: 'ARCHIVA_USERNAME', passwordVariable: 'ARCHIVA_PASSWORD'),
+                         usernamePassword(credentialsId: 'jenkins', usernameVariable: 'JENKINS_USERNAME', passwordVariable: 'JENKINS_PASSWORD')]) {
+                    sh 'JAVA_HOME=$(./.gradle/javaenv/javaenv home) ./gradlew pipeline:publishJenkinsJobs -PmavenRepositoryUsername=$ARCHIVA_USERNAME -PmavenRepositoryPassword=$ARCHIVA_PASSWORD ' +
+                            '-PjenkinsUsername=$JENKINS_USERNAME -PjenkinsPassword=$JENKINS_PASSWORD'
+                }
             }
         }
     }
