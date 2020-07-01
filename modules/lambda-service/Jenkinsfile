@@ -24,4 +24,25 @@ pipeline {
         }
     }
 
+    post {
+        always {
+            publishHTML (target : [allowMissing: true,
+                                   alwaysLinkToLastBuild: false,
+                                   keepAll: true,
+                                   reportDir: 'modules/lambda-service/build/reports',
+                                   includes: '**/*',
+                                   reportFiles: 'index.html',
+                                   reportName: 'lambda-service-reports',
+                                   reportTitles: 'lambda-service-reports'])
+            publishHTML (target : [allowMissing: true,
+                                   alwaysLinkToLastBuild: false,
+                                   keepAll: true,
+                                   reportDir: 'modules/lambda-service-model/build/reports',
+                                   includes: '**/*',
+                                   reportFiles: 'index.html',
+                                   reportName: 'lambda-service-model-reports',
+                                   reportTitles: 'lambda-service-model-reports'])
+        }
+    }
+
 }

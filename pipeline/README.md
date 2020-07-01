@@ -13,13 +13,16 @@ Prerequisites
 You need a Jenkins server and a Maven repository server, and valid admin credentials for each.
 
 
-Running/Job Setup
------------------
+Initial Setup
+-------------
 
  1. Ensure the settings in `gradle.properties` are correct.
  2. Run `./gradlew deploySecrets -PjenkinsUsername=XXX -PjenkinsPassword=YYY
   -PmavenRepositoryUsername=AAA -PmavenRepositoryPaswsword` to deploy the maven repo secret
  3. Run `./gradlew -PjenkinsUsername=XXX -PjenkinsPassword=YYY pipeline:publishJenkinsJobs` to create/update the Jenkins jobs.
+ 
+ Once you have completed this, the `master-job` will poll for changes to the pipeline module and update the job
+ definitions accordingly.
  
 Project Structure
 -----------------
@@ -33,6 +36,10 @@ Project Structure
  * `src/xml` XML templates.  
  
  
- 
+Creating a New Job
+------------------
+
+
+
 
  

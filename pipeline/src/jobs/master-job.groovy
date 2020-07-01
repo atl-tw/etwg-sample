@@ -16,7 +16,7 @@ pipelineJob('master-job') {
                         configure { git ->
                             git / 'extensions' / 'hudson.plugins.git.extensions.impl.PathRestriction' {
                                 includedRegions "pipeline/.*"
-                                excludedRegions "README.md\n\\.gitignore\npom.xml"
+                                excludedRegions "README.md\n\\.gitignore"
                             }
                         }
                     }
