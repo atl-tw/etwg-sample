@@ -29,7 +29,6 @@ dependencies {
     implementation 'net.logstash.logback:logstash-logback-encoder:4.10'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
-
 }
 
 dependencyManagement {
@@ -37,7 +36,6 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
-
 
 compileKotlin {
     kotlinOptions.jvmTarget = "11"

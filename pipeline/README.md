@@ -27,7 +27,9 @@ Project Structure
  * `src/main/groovy`  Groovy classes for interacting with the Jenkins API
  * `src/jobs` The JobDSL files for configuring the jobs. These should be kept as thin as possibe. The primary build
    configuration is configured in the `Jenkinsfile` for individual modules. Ideally you should be able to deploy these
-   configurations once and forget about them, but rather use the `Jenkinsfiles` for actually controlling your build. 
+   configurations once and forget about them, but rather use the `Jenkinsfiles` for actually controlling your build.
+ * `Jenkinsfile`/`src/jobs/master-job.groovy` these are the jobs that execute the Job Setup tasks listed above so that
+   changes to the pipeline project are deployed automatically. 
  * `src/xml` XML templates.  
  
  

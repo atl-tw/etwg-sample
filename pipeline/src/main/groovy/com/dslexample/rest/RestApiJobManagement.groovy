@@ -8,6 +8,10 @@ import org.apache.http.util.EntityUtils
 
 class RestApiJobManagement extends MockJobManagement {
 
+    private boolean creds = false;
+    final createCred = 'credentials/store/system/domain/_/createCredentials'
+    final createITem = 'createItem'
+
     final RESTClient restClient
     private boolean crumbHeaderSet = false
 
@@ -19,6 +23,10 @@ class RestApiJobManagement extends MockJobManagement {
     void setCredentials(String username, String password) {
         crumbHeaderSet = false
         restClient.headers['Authorization'] = 'Basic ' + "$username:$password".bytes.encodeBase64()
+    }
+
+    void setCreds(boolean value){
+        this.creds = value;
     }
 
     @Override
@@ -73,17 +81,17 @@ class RestApiJobManagement extends MockJobManagement {
         new File(filePath).text
     }
 
-    private boolean create(String name, String xml, boolean isView) {
+    boolean create(String name, String xml, boolean isView) {
         String job
         String path
         if (name.contains('/')) {
             int index = name.lastIndexOf('/')
             String folder = name[0..(index - 1)]
             job = name[(index + 1)..-1]
-            path = getPath(folder, isView) + '/createItem'
+            path = getPath(folder, isView) + '/'+ (creds? createCred : createITem)
         } else {
             job = name
-            path = isView ? 'createView' : 'createItem'
+            path = isView ? 'createView' : (creds ? createCred : createITem)
         }
 
         setCrumbHeader()
@@ -94,13 +102,13 @@ class RestApiJobManagement extends MockJobManagement {
             requestContentType: 'application/xml'
         )
         if(resp.status > 202) {
-            println "path $path"
+            println "$resp.status path $path"
             println EntityUtils.toString(resp.entity);
         }
         resp.status == 200
     }
 
-    private boolean update(String name, String xml, boolean isView) {
+     boolean update(String name, String xml, boolean isView) {
         setCrumbHeader()
         HttpResponseDecorator resp = restClient.post(
             path: getPath(name, isView) + '/config.xml',
@@ -111,15 +119,20 @@ class RestApiJobManagement extends MockJobManagement {
         resp.status == 200
     }
 
-    private String fetchExistingXml(String name, boolean isView) {
+    String fetchExistingXml(String name, boolean isView) {
         setCrumbHeader()
-        HttpResponseDecorator resp = restClient.get(
-            contentType: ContentType.TEXT,
-            path: getPath(name, isView) + '/config.xml',
-            headers: [Accept: 'application/xml'],
-        )
-        resp?.data?.text
-    }
+        try {
+            HttpResponseDecorator resp = restClient.get(
+                    contentType: ContentType.TEXT,
+                    path: getPath(name, isView) + '/config.xml',
+                    headers: [Accept: 'application/xml'],
+            )
+            resp?.data?.text
+        } catch(NoSuchMethodError e){
+            //TODO This a hack to get around a bug with groovy 3 and http-builder.
+            return "temp"
+        }
+     }
 
     static String getPath(String name, boolean isView) {
         if (name.startsWith('/')) {

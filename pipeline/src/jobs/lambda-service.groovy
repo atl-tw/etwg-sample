@@ -1,7 +1,4 @@
 pipelineJob('lambda-service') {
-    properties {
-        disableConcurrentBuilds()
-    }
     triggers {
         scm('*/5 * * * *')
     }

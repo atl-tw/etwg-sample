@@ -46,3 +46,58 @@ task publishJenkinsJobs(dependsOn: 'classes', type: JavaExec) {
     systemProperties props
 }
 
+task formatArchivaSecret(type: Copy) {
+    from 'src/xml/'
+    into "$buildDir/xml/archiva"
+    filter { line ->
+        line.replaceAll('CREDENTIAL_ID', 'archiva')
+            .replaceAll('CREDENTIAL_DESCRIPTION', 'Archiva repository credentials')
+            .replaceAll('CREDENTIAL_USERNAME', project.mavenRepositoryUsername)
+            .replaceAll('CREDENTIAL_PASSWORD', project.mavenRepositoryPassword)
+    }
+}
+
+task publishArchivaSecret(dependsOn: ['classes', 'formatArchivaSecret'], type: JavaExec) {
+    def props = [
+            secret: "archiva",
+            file : "$buildDir/xml/archiva/credential-template.xml",
+            baseUrl : "${project.property('jenkins.url')}/", // if you have a folder, put it here
+            username: project.hasProperty('jenkinsUsername') ? project.property('jenkinsUsername') : '',
+            password: project.hasProperty('jenkinsPassword') ? project.property('jenkinsPassword') : ''
+
+    ]
+    main = 'com.dslexample.rest.RestApiSecretsRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties props
+}
+
+task formatJenkinsSecret(type: Copy) {
+    from 'src/xml/'
+    into "$buildDir/xml/jenkins"
+    filter { line ->
+        line.replaceAll('CREDENTIAL_ID', 'jenkins')
+                .replaceAll('CREDENTIAL_DESCRIPTION', 'Jenkins self hosted admin credentials')
+                .replaceAll('CREDENTIAL_USERNAME', project.jenkinsUsername)
+                .replaceAll('CREDENTIAL_PASSWORD', project.jenkinsPassword)
+    }
+}
+
+task publishJenkinsSecret(dependsOn: ['classes', 'formatJenkinsSecret'], type: JavaExec) {
+    def props = [
+            secret: "jenkins",
+            file : "$buildDir/xml/jenkins/credential-template.xml",
+            baseUrl : "${project.property('jenkins.url')}/", // if you have a folder, put it here
+            username: project.hasProperty('jenkinsUsername') ? project.property('jenkinsUsername') : '',
+            password: project.hasProperty('jenkinsPassword') ? project.property('jenkinsPassword') : ''
+
+    ]
+    main = 'com.dslexample.rest.RestApiSecretsRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperties props
+}
+
+task deploySecrets(){
+    dependsOn publishArchivaSecret
+    dependsOn publishJenkinsSecret
+}
+
