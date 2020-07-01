@@ -2,7 +2,7 @@ pipelineJob('master-job') {
     triggers {
         scm('*/5 * * * *')
     }
-    description("Lambda Service Build")
+    description("This build keeps the job definitions up to date")
     definition {
         cpsScm {
             scm {
